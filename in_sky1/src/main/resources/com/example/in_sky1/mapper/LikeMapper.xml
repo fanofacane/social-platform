@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.in_sky1.mapper.LikeMapper">
+    <!--根据ID更新员工基本信息-->
+    <!--set标签: 会自动生成set关键字; 会自动的删除掉更新字段后多余,-->
+    <!-- 检查点赞是否存在 -->
+    <select id="checkLikeExists" resultType="Boolean">
+        SELECT COUNT(1)
+        FROM likes
+        WHERE user_id = #{userId}
+        <choose>
+            <!-- 帖子点赞 -->
+            <when test="postId != null">
+                AND post_id = #{postId}
+                AND comment_id IS NULL
+            </when>
+            <!-- 评论点赞 -->
+            <when test="commentId != null">
+                AND comment_id = #{commentId}
+                AND post_id IS NULL
+            </when>
+        </choose>
+    </select>
+
+    <!-- 插入点赞记录 -->
+    <insert id="insertLike" parameterType="com.example.in_sky1.pojo.Like" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO likes (user_id, post_id, comment_id, create_time)
+        VALUES (
+        #{userId},
+        #{postId},
+        #{commentId},
+        #{createTime}
+        )
+    </insert>
+
+    <!-- 删除点赞记录 -->
+    <delete id="deleteLike">
+        DELETE FROM likes
+        WHERE user_id = #{userId}
+        <if test="postId != null">
+            AND post_id = #{postId}
+        </if>
+        <if test="commentId != null">
+            AND comment_id = #{commentId}
+        </if>
+    </delete>
+
+
+    <select id="getLikeListByUserId" resultType="com.example.in_sky1.pojo.Card">
+        SELECT *
+        FROM posts left join likes on posts.id=likes.post_id
+        WHERE likes.user_id = #{userId}
+    </select>
+</mapper>

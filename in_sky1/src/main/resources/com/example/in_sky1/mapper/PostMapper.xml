@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.in_sky1.mapper.PostMapper">
+    <!--根据ID更新员工基本信息-->
+    <!--set标签: 会自动生成set关键字; 会自动的删除掉更新字段后多余,-->
+
+    <select id="getPostsByFollowed" resultType="com.example.in_sky1.pojo.Post">
+        SELECT * FROM posts
+        WHERE author_id IN
+        <foreach item="userId" collection="userIds" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+        ORDER BY create_time DESC
+    </select>
+
+<!--    <update id="updatePostLikes">-->
+<!--        UPDATE posts-->
+<!--        SET likes_count = likes_count + #{count}-->
+<!--        WHERE post_id = #{postId}-->
+<!--        &lt;!&ndash; 保证数值不小于0 &ndash;&gt;-->
+<!--        <if test="count &lt; 0">-->
+<!--            AND likes_count >= ABS(#{count})-->
+<!--        </if>-->
+<!--    </update>-->
+
+
+
+</mapper>

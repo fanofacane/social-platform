@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.in_sky1.mapper.CardMapper">
+    <!--根据ID更新员工基本信息-->
+    <!--set标签: 会自动生成set关键字; 会自动的删除掉更新字段后多余,-->
+
+
+    <select id="getCardByKey" resultType="com.example.in_sky1.pojo.Card">
+        select p.* from posts p left join users u on p.author_id = u.id
+        <where>
+            <if test="key != null and key != ''">
+                p.title like concat('%',#{key},'%')
+                or p.content like concat('%',#{key},'%')
+                or u.username like concat('%',#{key},'%')
+            </if>
+        </where>
+        order by p.update_time desc
+    </select>
+
+    <!-- 查询首页数据（无游标） -->
+    <select id="queryMoreCard" resultType="com.example.in_sky1.pojo.Card">
+        SELECT *
+        FROM posts
+        ORDER BY create_time DESC, id DESC
+        LIMIT #{size}
+    </select>
+
+    <!-- 查询下一页数据（有游标） -->
+    <select id="findNextPage" resultType="com.example.in_sky1.pojo.Card">
+        SELECT *
+        FROM posts
+        <where>
+            <if test="cursorTime != null and cursorId != null">
+                create_time &lt; #{cursorTime} OR
+                (create_time = #{cursorTime} AND id &lt; #{cursorId})
+            </if>
+            <!-- 无游标时条件省略，代表获取最新的 -->
+        </where>
+        ORDER BY create_time DESC, id DESC
+        LIMIT #{size}
+    </select>
+
+    <!-- 根据ID查询视频 -->
+    <select id="findById" resultType="com.example.in_sky1.dto.PostDTO">
+        SELECT id, title, picture_url, create_time
+        FROM posts
+        WHERE id = #{cursorId}
+    </select>
+
+
+
+
+</mapper>

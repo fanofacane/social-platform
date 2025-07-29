@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.in_sky1.mapper.CommentMapper">
+    <!--根据ID更新员工基本信息-->
+    <!--set标签: 会自动生成set关键字; 会自动的删除掉更新字段后多余,-->
+
+    <select id="getTopLevelComments" resultType="com.example.in_sky1.pojo.Commentt">
+        SELECT * FROM comments
+        WHERE post_id = #{postId} AND parent_comment_id IS NULL
+    </select>
+
+    <select id="getRepliesByParentId" resultType="com.example.in_sky1.pojo.Commentt">
+        SELECT * FROM comments
+        WHERE parent_comment_id = #{parentCommentId}
+    </select>
+
+    <!-- 更新评论点赞数 -->
+<!--    <update id="updateCommentLikes">-->
+<!--        UPDATE comments-->
+<!--        SET likes_count = likes_count + #{count}-->
+<!--        WHERE id = #{commentId}-->
+<!--        <if test="count &lt; 0">-->
+<!--            AND likes_count >= ABS(#{count})-->
+<!--        </if>-->
+<!--    </update>-->
+
+    <select id="selectRepliesByParentId" resultType="com.example.in_sky1.pojo.Commentt">
+        SELECT * FROM comments
+        WHERE parent_comment_id = #{parentCommentId}
+        ORDER BY create_time ASC
+    </select>
+
+    <insert id="insertComment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO comments (post_id, author_id, parent_comment_id, content)
+        VALUES (#{postId}, #{authorId}, #{parentCommentId}, #{content})
+    </insert>
+</mapper>
