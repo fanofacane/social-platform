@@ -12,7 +12,7 @@ spring:
   servlet:
     multipart:
       #最大单个文件大小
-      max-file-size: 10MB
+      max-file-size: 100MB
       #最大请求大小(包括所有文件和表单数据)
       max-request-size: 100MB
   #配置redis
@@ -49,7 +49,12 @@ aliyun:
     endpoint: https://oss-cn-hangzhou.aliyuncs.com
     bucketName: w71one-sp
     region: cn-hangzhou
-
+#minio
+minio:
+  endpoint: http://47.96.156.182:9000 # 注意这里一定要加“http://”，否则可能出错
+  accessKey: fanofacane
+  secretKey: w71one_sxx
+  bucket: origin
 # PageHelper 配置
 pagehelper:
   helper-dialect: mysql   # 数据库方言

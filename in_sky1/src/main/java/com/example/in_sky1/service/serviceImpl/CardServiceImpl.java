@@ -97,12 +97,7 @@ public class CardServiceImpl implements CardService {
                 cardDetail.setIsCollection(b);
             }
         }
-        String comments = redisTemplate.opsForValue().get("cardCommentsCache::" + id);
-        if(comments!=null&&!comments.isEmpty()){
-            cardDetail.setCommentsList(JSON.parseArray(comments, Commentt.class));
-        }else {
-            cardDetail.setCommentsList(commentService.getCommentTree(id,userId));
-        }
+        cardDetail.setCommentsList(commentService.getCommentTree(id,userId));
         return cardDetail;
     }
 

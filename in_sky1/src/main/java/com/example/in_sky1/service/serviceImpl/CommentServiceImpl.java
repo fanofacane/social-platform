@@ -36,27 +36,19 @@ public class CommentServiceImpl implements CommentService {
     private CacheExpireUtils cacheExpireUtils;
     @Override
     public List<Commentt> getCommentTree(Integer postId,Integer userId) {
-        int ttl = cacheExpireUtils.randomExpire(CacheTTL.COMMENT_CACHE_BASE);
-        String commentsCache = redisTemplate.opsForValue().get("cardCommentsCache::" + postId);
-        if(commentsCache != null&&!commentsCache.isEmpty()) {
-            return JSON.parseArray(commentsCache, Commentt.class);
-        }else{
-            List<Commentt> topComments = commentMapper.getTopLevelComments(postId);
-            if(!topComments.isEmpty()) {
-                topComments.forEach(comment ->
-                        comment.setReplies(getNestedReplies(comment.getId()))
-                );
-                for (Commentt commentt : topComments) {
-                    User user=userMapper.selectById(commentt.getAuthorId());
-                    commentt.setUser(user);
-                    commentt.setIsLike(likeMapper.checkLikeExists(userId,null,commentt.getId()));
-                }
-                String jsonString = JSON.toJSONString(topComments);
-                redisTemplate.opsForValue().set("cardCommentsCache::"+postId,jsonString,ttl, TimeUnit.SECONDS);
-                return topComments;
-            }else {
-                return null;
+        List<Commentt> topComments = commentMapper.getTopLevelComments(postId);
+        if(!topComments.isEmpty()) {
+            topComments.forEach(comment ->
+                    comment.setReplies(getNestedReplies(comment.getId()))
+            );
+            for (Commentt commentt : topComments) {
+                User user=userMapper.selectById(commentt.getAuthorId());
+                commentt.setUser(user);
+                commentt.setIsLike(likeMapper.checkLikeExists(userId,null,commentt.getId()));
             }
+            return topComments;
+        }else {
+            return null;
         }
     }
 
@@ -76,7 +68,6 @@ public class CommentServiceImpl implements CommentService {
         comment.setUser(user);
         comment.setLikesCount(0);
         comment.setCreateTime(LocalDateTime.now());
-        redisTemplate.delete("cardCommentsCache::"+comment.getPostId());
         // 返回完整的评论数据
         return comment;
     }

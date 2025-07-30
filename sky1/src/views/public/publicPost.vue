@@ -14,21 +14,12 @@ const publicPost= async()=>{
     const res=await insertPost(postForm)
     if(res.code){
         open1();
-        postForm.pictureUrl=''
-        postForm.content=''
-        postForm.title=''
-        postForm.type=''
-        emit('publicSuccess')  // 触发父组件关闭登录框的回调
+        cancel();
         router.push('/index')
-
     }else{
         ElMessage.error("发布失败，存在异常")
-        postForm.pictureUrl=''
-        postForm.content=''
-        postForm.title=''
-        postForm.type=''
+        cancel();
     }
-
 }
 const cancel=()=>{
     postForm.pictureUrl=''
