@@ -5,9 +5,9 @@ spring:
     name: in_sky1
   #配置数据库的连接信息
   datasource:
-    url: jdbc:mysql://localhost:3306/sky
+    url: jdbc:mysql://47.96.156.182:3306/sky
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
+    username: sky
     password: 1234
   servlet:
     multipart:
@@ -18,8 +18,9 @@ spring:
   #配置redis
   data:
     redis:
-      host: localhost
+      host: 47.96.156.182
       port: 6379
+      password: 1234
   ai:
     openai:
       base-url: https://dashscope.aliyuncs.com/compatible-mode

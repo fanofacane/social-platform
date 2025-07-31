@@ -104,10 +104,10 @@ const beforeAvatarUpload = (rawFile) => {
         <!-- 头像 -->
         <div class="avatar-wrapper" v-if="store.state.isLogin">
             <img v-if="user.picture" :src="user.picture" class="user-avatar" alt="用户头像">
-            <img v-else src="https://w71one-sp.oss-cn-hangzhou.aliyuncs.com/88ad0b02-dc41-4e55-88b6-ae5c00f0d18c.jpg" class="user-avatar" alt="用户头像">
+            <img v-else src="http://47.96.156.182:9000/origin/sky/3e9ce3813b7199ea9588eeb920f41208_512_512.jpg" class="user-avatar" alt="用户头像">
         </div>
         <div class="avatar-wrapper" v-else>
-            <img src="https://w71one-sp.oss-cn-hangzhou.aliyuncs.com/88ad0b02-dc41-4e55-88b6-ae5c00f0d18c.jpg" class="user-avatar" alt="用户头像">
+            <img src="http://47.96.156.182:9000/origin/sky/3e9ce3813b7199ea9588eeb920f41208_512_512.jpg" class="user-avatar" alt="用户头像">
         </div>
         <!-- 文字信息 -->
         <div class="info-section">

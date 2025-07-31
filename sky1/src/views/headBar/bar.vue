@@ -74,7 +74,7 @@
               @mouseenter="handleAvatarEnter"
               @mouseleave="handleAvatarLeave">
                 <div v-if="!store.state.isLogin" @click="dialogVisible=true">
-                        <img class="user-avatar"  src="https://w71one-sp.oss-cn-hangzhou.aliyuncs.com/88ad0b02-dc41-4e55-88b6-ae5c00f0d18c%20%281%29.jpg" />
+                        <img class="user-avatar"  src="http://47.96.156.182:9000/origin/sky/3e9ce3813b7199ea9588eeb920f41208_512_512.jpg" />
                 </div>
                 <div v-else>
                         <img :src="user.picture"   class="user-avatar" >
@@ -84,7 +84,7 @@
             <div v-show="showUserMenu"   class="user-menu"  @mouseenter="cancelClose"  @mouseleave="triggerClose">
               <!-- 用户信息 -->
               <div class="user-profile" v-if="!store.state.isLogin">
-                  <img src="https://w71one-sp.oss-cn-hangzhou.aliyuncs.com/88ad0b02-dc41-4e55-88b6-ae5c00f0d18c%20%281%29.jpg" class="profile-avatar">
+                  <img src="http://47.96.156.182:9000/origin/sky/3e9ce3813b7199ea9588eeb920f41208_512_512.jpg" class="profile-avatar">
                   <div class="profile-info">
                   <div class="username">{{'请先登录哦！！'}}
                   <div class="stats">

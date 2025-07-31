@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
         userDTO1.setAge(18);
         userDTO1.setBio("还没有设置个性签名qwq");
         userDTO1.setIp("未知");
-        userDTO1.setPicture("https://w71one-sp.oss-cn-hangzhou.aliyuncs.com/88ad0b02-dc41-4e55-88b6-ae5c00f0d18c%20%281%29.jpg");
+        userDTO1.setPicture("http://47.96.156.182:9000/origin/sky/3e9ce3813b7199ea9588eeb920f41208_512_512.jpg");
         Message message=new Message();
         userMapper.insert(userDTO1);
         message.setTo(userDTO1.getId().toString());
