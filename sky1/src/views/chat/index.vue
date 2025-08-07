@@ -87,8 +87,8 @@ const handleSend=async(content)=> {
   const Ai = {
     from: activeFriendId.value,
     to: currentUser.value.id,
-    content:res.data,
-    // content:res,
+    // content:res.data,
+    content:res,
     createTime,
     username:friend.username,
     picture:friend.picture

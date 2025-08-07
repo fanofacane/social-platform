@@ -27,7 +27,7 @@ const router = createRouter({
       redirect: '/index', //重定向
       meta: { requestAuth: false },
       children: [
-        { path: 'index', name: 'index', component: IndexView, meta: { requestAuth: false } },
+        { path: 'origin', name: 'origin', component: IndexView, meta: { requestAuth: false } },
         {
           path: 'user', name: 'user', component: MyIndex, redirect: '/user/userIndex', meta: { requestAuth: true },
           children: [
@@ -37,7 +37,7 @@ const router = createRouter({
           ]
         },
         { path: 'follow', name: 'follow', component: FollowView },
-        { path: 'video', name: 'video', component: VideoView },
+        { path: 'index', name: 'index', component: VideoView },
         { path: 'chat/:id?', name: 'chat', component: ChatView },
         { path: 'visitor/:id', name: 'visitor', component: visitorUserView },
         { path: 'shop', name: 'shop', component: shopView },
@@ -49,7 +49,7 @@ const router = createRouter({
     { path: '/login', name: 'login', component: LoginView },
     { path: '/public', name: 'public', component: PublicPostView },
   ],
-  
+
 });
 // 本地没有token就跳到登录界面
 router.beforeEach((to, from, next) => {

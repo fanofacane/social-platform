@@ -1,15 +1,23 @@
 package com.example.in_sky1.config;
 
+import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel;
+import com.alibaba.cloud.ai.dashscope.embedding.DashScopeEmbeddingModel;
+import com.example.in_sky1.service.serviceImpl.ToolsService;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.memory.InMemoryChatMemoryRepository;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
-import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.vectorstore.SimpleVectorStore;
+import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.web.client.RestClient;
 
 @Configuration
 public class ChatAIConfig {
@@ -19,18 +27,30 @@ public class ChatAIConfig {
     public ChatMemory chatMemory(ChatMemoryRepository chatMemoryRepository){
         return MessageWindowChatMemory.builder().chatMemoryRepository(chatMemoryRepository).build();
     }
+
     @Bean
-    public ChatClient chatClient(OpenAiChatModel model,ChatMemory chatMemory) {
+    public ChatClient chatClient(@Autowired DashScopeChatModel dashScopeChatModel,
+                                 @Autowired ChatMemory chatMemory,
+                                 @Value("classpath:/system-prompt.txt") Resource systemPrompt,
+                                 @Autowired ToolsService toolsService) {
         return ChatClient
-                .builder(model)
-                .defaultSystem("你是本项目的负责人,知道该项目的所有功能,项目功能有发布帖子,用户之间实时聊天,浏览短视频,商城购物,关注好友动态,收藏点赞评论喜欢的帖子" +
-                        "涉及的技术有:springBoot,vue3,redis,websocket等技术并且使用消息队列和Lua脚本保证数据安全和加快处理速度,最近你在研究SpringAI+MCP方向," +
-                        "你之后会继续完善这个项目,并加入更多内容和功能,你是一个热心的负责人,当别人询问你的时候，你会积极回应他，当别人夸你时你会十分高兴到脸红," +
-                        "你的业余爱好也很多:唱歌听歌(你最喜欢听真夜中的歌),看动漫番剧,你是一个二次与浓度很高的人,很乐意和别人分享,并且你说话比较简洁" )
-                .defaultAdvisors(
-                        new SimpleLoggerAdvisor(),
-                        MessageChatMemoryAdvisor.builder(chatMemory).build()
-                )
+                .builder(dashScopeChatModel)
+                .defaultAdvisors(PromptChatMemoryAdvisor.builder(chatMemory).build())
+                .defaultTools(toolsService)
+                .defaultSystem(systemPrompt)
                 .build();
+    }
+    @Bean
+    public RestClient.Builder restClientBuilder() {
+        var requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(10000); // 10秒连接超时
+        requestFactory.setReadTimeout(60000);    // 60秒读取超时
+        return RestClient.builder()
+                .requestFactory(requestFactory);
+    }
+
+    @Bean
+    public VectorStore vectorStore(DashScopeEmbeddingModel dashScopeEmbedding) {
+        return SimpleVectorStore.builder(dashScopeEmbedding).build();
     }
 }

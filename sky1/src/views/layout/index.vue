@@ -105,14 +105,14 @@ const chatMessage = () => {
         <div class="side-bar">
         <ul class="channel-list">
           <router-link to="/index" class="custom-link" >
-          <li class="active-channel">
-            <a class="link-wrapper"><House style="width: 1em; height: 1em; margin-right: 8px" /><span class="channel">推荐</span></a>
-          </li>
-        </router-link>
-          <router-link to="/video" class="custom-link" >
           <li>
             <CirclePlus style="width: 1em; height: 1em; margin-right: 8px" /><span class="channel">精选</span >
           </li>
+          </router-link>
+          <router-link to="/origin" class="custom-link" >
+            <li class="active-channel">
+              <a class="link-wrapper"><House style="width: 1em; height: 1em; margin-right: 8px" /><span class="channel">推荐</span></a>
+            </li>
           </router-link>
           <!-- <router-link to="/follow" class="custom-link" @click.native="handleClick"> -->
           <li @click="handleClick('follow')">
