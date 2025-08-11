@@ -5,9 +5,10 @@ spring:
     name: in_sky1
   #配置数据库的连接信息
   datasource:
-    url: jdbc:mysql://47.96.156.182:3306/sky
+#    url: jdbc:mysql://47.96.156.182:3306/sky
+    url: jdbc:mysql://localhost:3306/sky
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: sky
+    username: root
     password: 1234
   servlet:
     multipart:
@@ -37,6 +38,8 @@ mybatis:
 
 #配置事务管理日志级别
 logging:
+  file:
+    name: log/sky.log
   level:
     org.springframework.jdbc.support.JdbcTransactionManager: debug
     org.springframework.ai.chat.client.advisor: debug

@@ -74,7 +74,13 @@ const store = createStore({
     actions: {
         initWebSocket({ commit, dispatch, state }) {
             if (state.isLogin) {
-                const ws = new WebSocket(`ws://localhost:8081/chat?token=${state.token}`)
+                const ws = new WebSocket(`ws://localhost:8082/order-tracking?token=${state.token}`)
+                // 新增：监听错误事件
+                ws.onerror = (error) => {
+                    console.error('WebSocket 连接错误：', error);
+                    // 打印错误细节（如错误码、消息）
+                    console.error('错误信息：', error.message);
+                };
                 ws.onopen = () => {
                     console.log('WebSocket 连接已建立')
                 }

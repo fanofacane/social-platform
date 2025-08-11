@@ -30,12 +30,11 @@ public class TokenFilter implements Filter {
         String requestURI = request.getRequestURI(); // /employee/login
 
         //2. 判断是否是登录请求, 如果路径中包含 /login, 说明是登录操作, 放行
-        if (requestURI.contains("/login")||requestURI.contains("/posts")||requestURI.contains("/register")||requestURI.contains("/chat")||requestURI.contains("/visitor")){
+        if (requestURI.contains("/login")||requestURI.contains("/posts")||requestURI.contains("/register")||requestURI.contains("/chat")||requestURI.contains("/visitor")||requestURI.contains("/order-tracking")){
             log.info("通用请求, 放行");
             filterChain.doFilter(request, response);
             return;
         }
-
         //3. 获取请求头中的token
         String token = request.getHeader("token");
 
