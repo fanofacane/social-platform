@@ -14,16 +14,13 @@
         </foreach>
         ORDER BY create_time DESC
     </select>
-
-<!--    <update id="updatePostLikes">-->
-<!--        UPDATE posts-->
-<!--        SET likes_count = likes_count + #{count}-->
-<!--        WHERE post_id = #{postId}-->
-<!--        &lt;!&ndash; 保证数值不小于0 &ndash;&gt;-->
-<!--        <if test="count &lt; 0">-->
-<!--            AND likes_count >= ABS(#{count})-->
-<!--        </if>-->
-<!--    </update>-->
+    <select id="queryCardById" resultType="com.example.in_sky1.pojo.Post">
+        SELECT * FROM posts
+        WHERE id IN
+        <foreach item="id" collection="videosIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 
 
 

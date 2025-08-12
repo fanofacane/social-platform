@@ -24,10 +24,16 @@ public class FollowController {
     private PostService postService;
 
     // 根据多个用户ID查询动态
-    @GetMapping("/dynamics")
+/*    @GetMapping("/dynamics")
     public Result getPostsByUsers(){
         return Result.success(postService.getPostsByFollowed());
+    }*/
+    @GetMapping("/dynamics")
+    public Result getPostsByUsers(@RequestParam(defaultValue = "5") Integer count,
+                                  @RequestParam(required = false) Long lastTimestamp){
+        return Result.success(postService.getUserInboxVideos(count,lastTimestamp));
     }
+
 
     @PostMapping("/{followerId}/followings/{targetUserId}")
     public Result follow(@PathVariable Integer followerId,@PathVariable Integer targetUserId) {

@@ -36,6 +36,8 @@ public interface UserMapper {
 
     @Select("select following_id from user_follow where follower_id=#{id}")
     List<Integer> getFollowingIds(Integer id);
+    @Select("select follower_id from user_follow where following_id=#{id}")
+    List<Integer> getFollowerIds(Integer id);
 
     @Select("SELECT COALESCE(SUM(p.likes_count), 0) AS total_likes FROM users u LEFT JOIN posts p ON u.id = p.author_id WHERE u.id = #{userId}")
     Integer totalLike(Integer userId);

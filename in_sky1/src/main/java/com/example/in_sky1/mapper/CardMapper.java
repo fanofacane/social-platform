@@ -3,8 +3,10 @@ package com.example.in_sky1.mapper;
 import com.example.in_sky1.dto.PostDTO;
 import com.example.in_sky1.pojo.Card;
 import com.example.in_sky1.pojo.CardDetail;
+import com.example.in_sky1.pojo.Post;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDateTime;
@@ -23,7 +25,9 @@ public interface CardMapper {
     @Select("select * from posts where author_id=#{id}")
     List<Card> queryCardById(Integer id);
 
-    @Insert("insert into posts(title,content,picture_url,author_id,create_time,update_time,file_type)values (#{title},#{content},#{pictureUrl},#{authorId},#{createTime},#{updateTime},#{fileType})")
+    @Insert("insert into posts(title,content,picture_url,author_id,create_time,update_time,file_type) " +
+            "values (#{title},#{content},#{pictureUrl},#{authorId},#{createTime},#{updateTime},#{fileType})")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     void insert(PostDTO postDTO);
 
     List<Card> queryMoreCard(int size);
@@ -31,4 +35,8 @@ public interface CardMapper {
     PostDTO findById(Integer cursor);
 
     List<Card> findNextPage(Integer cursorId, LocalDateTime cursorTime, int size);
+
+    List<Card> queryCardByIds(List<Integer> videoIds);
+
+    List<Card> queryCardByuserId(List<Integer> followedIds);
 }

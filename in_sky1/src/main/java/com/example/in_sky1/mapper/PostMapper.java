@@ -4,6 +4,7 @@ import com.example.in_sky1.pojo.Card;
 import com.example.in_sky1.pojo.Post;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
@@ -21,4 +22,5 @@ public interface PostMapper {
     @Update("update posts set collections_count = collections_count + #{count} where id=#{postId}")
     void updatePostCollection(Integer postId, int count);
 
+    List<Post> queryCardById(List<Integer> videosIds);
 }

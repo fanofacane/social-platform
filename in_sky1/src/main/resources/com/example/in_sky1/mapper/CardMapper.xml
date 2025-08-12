@@ -48,8 +48,21 @@
         FROM posts
         WHERE id = #{cursorId}
     </select>
+    <select id="queryCardByIds" resultType="com.example.in_sky1.pojo.Card">
+        SELECT * FROM posts
+        WHERE id IN
+        <foreach item="id" collection="videoIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 
-
+    <select id="queryCardByuserId" resultType="com.example.in_sky1.pojo.Card">
+        SELECT * FROM posts
+        WHERE author_id IN
+        <foreach item="id" collection="followedIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 
 
 </mapper>

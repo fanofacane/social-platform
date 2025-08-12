@@ -15,6 +15,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,6 +36,8 @@ public class CardServiceImpl implements CardService {
     private CommentService commentService;
     @Autowired
     private FollowService followService;
+    // Redis键前缀，用于区分不同用户的收件箱
+    private static final String FEED_INBOX_PREFIX = "feed:inbox:";
     @Override
     public Map<String, Object> queryMoreCard(Integer userId,String fileType,Integer cursor,int size) {
         Integer commentId=null;
@@ -133,15 +136,41 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public String insertPost(PostDTO postDTO) {
-        try {
-            postDTO.setPictureUrl(postDTO.getPictureUrl());
-            postDTO.setAuthorId(CurrentHolder.getCurrentId());
-            postDTO.setCreateTime(LocalDateTime.now());
-            postDTO.setUpdateTime(LocalDateTime.now());
-            cardMapper.insert(postDTO);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    //填充基础字段
+    postDTO.setAuthorId(CurrentHolder.getCurrentId());
+    postDTO.setCreateTime(LocalDateTime.now());
+    postDTO.setUpdateTime(LocalDateTime.now());
+    //保存视频
+    cardMapper.insert(postDTO);
+    System.out.println("保存视频成功");
+
+    //查找作者粉丝
+        List<Integer> followingIds = userMapper.getFollowerIds(postDTO.getAuthorId());
+        if (!followingIds.isEmpty()){
+            //推送视频到粉丝收件箱
+            pushVideoToFansInbox(postDTO.getAuthorId(),postDTO.getId(),followingIds);
         }
     return "success";
+    }
+    public void pushVideoToFansInbox(Integer authorId, Integer videoId, List<Integer> fansIds) {
+        // 使用当前时间戳作为分数，确保视频按时间排序
+        double score = Instant.now().toEpochMilli();
+        // 将视频ID推送到每个粉丝的收件箱
+        try {
+            for (Integer fanId : fansIds) {
+                System.out.println("用户ID"+fanId);
+                // 新增这行：检查redisTemplate是否注入成功
+                System.out.println("redisTemplate是否为null: " + (redisTemplate == null));
+                String inboxKey = FEED_INBOX_PREFIX + fanId;
+                // 向SortedSet中添加视频ID，分数为时间戳
+                Boolean add = redisTemplate.opsForZSet().add(inboxKey, videoId.toString(), score);
+                System.out.println("redis"+add);
+                // 限制收件箱大小，只保留最近的1000条视频，防止内存溢出
+                redisTemplate.opsForZSet().removeRange(inboxKey, 0, -1001);
+            }
+        } catch (Exception e) {
+            System.out.println("redis异常"+e);
+            throw new RuntimeException(e);
+        }
     }
 }
