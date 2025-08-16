@@ -9,6 +9,8 @@
 - 我是全栈开发，由于对前端的不熟悉所以我开发的很慢，刚开始连状态管理、组件通信都不知道
 - 经历2个月的折腾，一个社交短视频平台被我成功开发出来了
 - 由于第一次做项目，代码复用性很差，勉强看看吧
+- 
+- 此项目已经重构完成,加入视频推荐算法,优化代码规范等一系列问题详情可见https://github.com/fanofacane/LifeGlimpse[https://github.com/fanofacane/LifeGlimpse]
 
 ## 技术栈
 - SpringBoot
