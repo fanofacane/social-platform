@@ -2,62 +2,48 @@ server:
   port: 8081
 spring:
   application:
-    name: in_sky1
-  #配置数据库的连接信息
+    name: skyBackend
   datasource:
-#    url: jdbc:mysql://47.96.156.182:3306/sky
-    url: jdbc:mysql://localhost:3306/sky
+    url: jdbc:mysql://localhost:3306/{填写数据库地址}
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 1234
   servlet:
     multipart:
-      #最大单个文件大小
       max-file-size: 100MB
-      #最大请求大小(包括所有文件和表单数据)
       max-request-size: 100MB
-  #配置redis
+  #redis
   data:
     redis:
       host: localhost
       port: 6379
-  #配置qwenAI
+  #qwenAI
   ai:
     dashscope:
-      api-key: sk-48c3f48c97494935a609ee837a08de1e
+      api-key: {填写api-key}
       embedding:
         options:
           model: text-embedding-v4
-
-#Mybatis的相关配置
+    chat:
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: always
+            schema: classpath:/schema-mysql.sql
+#Mybatis
 mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    #开启驼峰命名映射开关
     map-underscore-to-camel-case: true
-
-#配置事务管理日志级别
 logging:
   file:
     name: log/sky.log
   level:
     org.springframework.jdbc.support.JdbcTransactionManager: debug
     org.springframework.ai.chat.client.advisor: debug
-
-#阿里云OSS
-aliyun:
-  oss:
-    endpoint: https://oss-cn-hangzhou.aliyuncs.com
-    bucketName: w71one-sp
-    region: cn-hangzhou
 #minio
 minio:
-  endpoint: http://47.96.156.182:9000 # 注意这里一定要加“http://”，否则可能出错
-  accessKey: fanofacane
-  secretKey: w71one_sxx
-  bucket: origin
-# PageHelper 配置
-pagehelper:
-  helper-dialect: mysql   # 数据库方言
-  reasonable: true        # 分页参数合理化（page<=0 时返回第一页）
-  support-methods-params: true  # 支持接口直接传递 page/size 参数
+  endpoint: {填写存储桶地址}
+  accessKey: {填写accessKey}
+  secretKey: {填写secretKey}
+  bucket: {填写存储桶名称}
