@@ -11,7 +11,7 @@
 ## 作者说
 - 由于是我第一个项目,我想把他做好,所以我将重新制作
 - 此项目已经重构完成,加入视频推荐算法,优化代码规范等一系列问题详情可见
-- https://github.com/fanofacane/LifeGlimpse
+- (LifeGlimpse)[https://github.com/fanofacane/LifeGlimpse]
 
 ## 功能
 - 聊天实时通信+消息提醒
